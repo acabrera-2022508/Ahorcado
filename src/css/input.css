@@ -1,0 +1,7 @@
+@tailwind;
+@tailwind components;
+@tailwind utilities;
+
+.arial {
+  font: 20px arial;
+}

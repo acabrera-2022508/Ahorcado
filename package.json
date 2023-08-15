@@ -1,0 +1,14 @@
+{
+  "name": "kinal-ahorcado",
+  "version": "1.0.0",
+  "description": "simple hangman game",
+  "main": "index.js",
+  "scripts": {
+    "test": "test"
+  },
+  "author": "Ander Cabrera",
+  "license": "ISC",
+  "devDependencies": {
+    "tailwindcss": "^3.3.3"
+  }
+}
