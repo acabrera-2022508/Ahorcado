@@ -1,6 +1,6 @@
 export default class Logic {
   constructor() {
-    this.word = 'test'.split('');
+    this.word = 'hola'.split('');
     this.correctLetters = [];
     this.logic = null;
     this.dictionary = [
@@ -52,20 +52,34 @@ export default class Logic {
     return this.abecedary.get(key);
   }
 
+  findIndexes(letter) {
+    let letterIndexes = [];
+
+    if (this.comprobate(letter)) {
+      this.word.forEach((ltr, i) => {
+        if (ltr === letter.toLowerCase()) letterIndexes.push(i);
+      });
+    }
+
+    return letterIndexes;
+  }
+
   comprobate(letter) {
-    let ans = false;
+    return this.word.some((ltr) => ltr === letter.toLowerCase());
+  }
 
-    this.word.map((ltr) => {
-      if (ltr === letter.toLowerCase()) ans = true;
-    });
-
-    return ans;
+  deleteLetter(letter) {
+    for (let i = this.findIndexes(letter).length - 1; i >= 0; i--) {
+      this.word.splice(this.findIndexes(letter)[i], 1)
+    }
   }
 
   containLetter(letter) {
     if (this.comprobate(letter)) {
+      this.deleteLetter(letter);
+      console.log(this.word);
       console.log('correcto');
-    }
+    } else this.dontContainLetter();
   }
 
   dontContainLetter() {
