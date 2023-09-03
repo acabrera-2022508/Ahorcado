@@ -1,7 +1,14 @@
+import View from "./view.js";
+
 export default class Logic {
   constructor() {
-    this.word = 'hola'.split('');
-    this.correctLetters = [];
+    this.wordContainer = ['saturno', 'sistemasolar', 'margarita', 'gato'];
+    this.randomNumber = Math.round(Math.random() * (this.wordContainer.length - 1));
+    this.word = this.wordContainer[this.randomNumber].split('');
+    console.log(this.randomNumber, "RNMB");
+    this.wordLength = this.word.length;
+    this.correctLetters = new Map();
+    this.view = new View();
     this.logic = null;
     this.dictionary = [
       ['q', document.getElementById('qKey')],
@@ -35,12 +42,14 @@ export default class Logic {
     this.abecedary = new Map(this.dictionary);
     this.oportunities = 7;
 
+    this.view.drawUnderlines(this.wordLength);
+    
     for (const [letter, button] of this.abecedary) {
       button.onclick = () => {
-        // this.comprobate();
         this.containLetter(this.getKey(letter).children[0].textContent);
-        // console.log(this.getKey(letter).children[0].textContent);
       };
+
+      this.setLettersPosition(letter);
     }
   }
 
@@ -52,14 +61,27 @@ export default class Logic {
     return this.abecedary.get(key);
   }
 
+  getWordLength() {
+    return this.wordLength;
+  }
+
+  getCorrectLetters() {
+    return this.correctLetters;
+  }
+
+  setLettersPosition(letter) {
+    for (let index of this.findIndexes(letter))
+      this.correctLetters.set(index, letter.toLowerCase());
+  }
+
   findIndexes(letter) {
     let letterIndexes = [];
 
-    if (this.comprobate(letter)) {
       this.word.forEach((ltr, i) => {
-        if (ltr === letter.toLowerCase()) letterIndexes.push(i);
+        if (ltr === letter.toLowerCase()) {
+          letterIndexes.push(i);
+        }
       });
-    }
 
     return letterIndexes;
   }
@@ -70,15 +92,19 @@ export default class Logic {
 
   deleteLetter(letter) {
     for (let i = this.findIndexes(letter).length - 1; i >= 0; i--) {
-      this.word.splice(this.findIndexes(letter)[i], 1)
+      this.word.splice(this.findIndexes(letter)[i], 1);
     }
+
+    this.findIndexes(letter);
   }
 
   containLetter(letter) {
     if (this.comprobate(letter)) {
-      this.deleteLetter(letter);
+      this.view.replaceWithLetter(this.getCorrectLetters(), letter)
+      this.deleteLetter(letter)
       console.log(this.word);
       console.log('correcto');
+      console.log(this.correctLetters);
     } else this.dontContainLetter();
   }
 
